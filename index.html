@@ -25,10 +25,17 @@
     --danger: #ff4a5a;
     --yellow: #ffd000;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'JetBrains+Mono', monospace; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'JetBrains Mono', monospace; -webkit-tap-highlight-color: transparent; }
   body { background: var(--bg); color: var(--text); padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
   h1 { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 700; text-align: center; margin: 10px 0 20px; color: var(--text); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; }
   h1 span { color: var(--accent); }
+  
+  /* Завжди видима кнопка встановлення */
+  .pwa-btn-card { background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(255,107,53,0.1)); border: 1px solid var(--accent); border-radius: 14px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .pwa-btn-text { font-size: 11px; font-weight: 600; line-height: 1.4; }
+  .pwa-btn-text strong { color: var(--accent); display: block; font-size: 12px; }
+  .btn-pwa-install { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
   .card-title { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -52,11 +59,6 @@
   .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.05); }
   #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; pointer-events: none; white-space: nowrap; }
   #toast.show { transform: translateX(-50%) translateY(0); }
-  .install-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface2); border-top: 1px solid var(--border); padding: 12px 16px; display: none; align-items: center; justify-content: space-between; z-index: 999; box-shadow: 0 -8px 24px rgba(0,0,0,0.3); }
-  .install-text { font-size: 12px; font-weight: 600; }
-  .install-btns { display: flex; gap: 8px; }
-  .btn-s { padding: 8px 14px; font-size: 11px; border-radius: 8px; }
-  .btn-s.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); box-shadow: none; }
   .prev-badge { background: rgba(0,212,255,0.05); border: 1px dashed rgba(0,212,255,0.2); border-radius: 8px; padding: 8px; margin-bottom: 12px; font-size: 11px; line-height: 1.5; }
 </style>
 </head>
@@ -64,6 +66,16 @@
 
 <h1>⚡ СВІТЛО<span>.calc</span></h1>
 
+<!-- КНОПКА ВСТАНОВЛЕННЯ, ЯКА ТУТ ЗАВЖДИ -->
+<div class="pwa-btn-card" id="alwaysInstallCard">
+  <div class="pwa-btn-text">
+    <strong>📲 Додати на екран</strong>
+    Швидкий доступ без інтернету
+  </div>
+  <button class="btn-pwa-install" id="btnAlwaysInstall">Встановити</button>
+</div>
+
+<!-- ПОТОЧНІ ПОКАЗНИКИ -->
 <div class="card">
   <div class="card-title">Поточні показники (Цей місяць)</div>
   <div class="grid-2">
@@ -94,12 +106,14 @@
 
 <button class="btn" id="btnCalc">Розрахувати</button>
 
+<!-- РЕЗУЛЬТАТ -->
 <div class="card" id="resultBox">
   <div class="card-title">Результат розрахунку</div>
   <div id="resDetails"></div>
   <div class="res-total" id="resTotal">0.00 грн</div>
 </div>
 
+<!-- ПОПЕРЕДНІ ЗНАЧЕННЯ -->
 <div class="card">
   <div class="card-title">Попередній місяць (База)</div>
   <div id="prevBadge" class="prev-badge">Немає збережених даних</div>
@@ -109,20 +123,13 @@
   <button class="btn btn-danger" id="btnClearPrev">Скинути базу попереднього місяця</button>
 </div>
 
+<!-- ІСТОРІЯ -->
 <div class="card">
   <div class="card-title">Історія записів</div>
   <div id="historyList"></div>
 </div>
 
 <div id="toast"></div>
-
-<div class="install-banner" id="installBanner">
-  <div class="install-text">Встановити калькулятор як додаток?</div>
-  <div class="install-btns">
-    <button class="btn btn-s secondary" id="btnCloseBanner">Ні</button>
-    <button class="btn btn-s" id="btnInstall">Так</button>
-  </div>
-</div>
 
 <script>
 let state = {
@@ -137,6 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnCalc').addEventListener('click', calculate);
   document.getElementById('btnClearPrev').addEventListener('click', clearPrev);
   document.getElementById('btnEditPrev').addEventListener('click', editPrev);
+  
+  // Якщо додаток вже запущено як PWA, ховаємо верхню панель встановлення
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    document.getElementById('alwaysInstallCard').style.display = 'none';
+  }
 });
 
 function renderPrev() {
@@ -291,6 +303,28 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+// ПЕРЕХВАТ ІГНОРУВАННЯ ТА ОБРОБКА КНОПКИ
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+document.getElementById('btnAlwaysInstall').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') {
+      showToast('✅ Додаток встановлено!');
+      document.getElementById('alwaysInstallCard').style.display = 'none';
+    }
+  } else {
+    // Якщо браузер не створив подію автоматично, даємо інструкцію
+    alert("Натисни на кнопку 'три крапки' вгорі Chrome або 'Поділитись' в Safari та вибери 'Додати на головний екран'.");
+  }
+});
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').then(reg => {
     reg.addEventListener('updatefound', () => {
@@ -298,32 +332,12 @@ if ('serviceWorker' in navigator) {
       newWorker.addEventListener('statechange', () => {
         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
           showToast('🔄 Оновлення калькулятора...');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          setTimeout(() => { window.location.reload(); }, 1500);
         }
       });
     });
   }).catch(() => {});
 }
-
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBanner').style.display = 'flex';
-});
-document.getElementById('btnInstall').addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  document.getElementById('installBanner').style.display = 'none';
-  if (outcome === 'accepted') showToast('✅ Додаток встановлено!');
-});
-document.getElementById('btnCloseBanner').addEventListener('click', () => {
-  document.getElementById('installBanner').style.display = 'none';
-});
 </script>
 </body>
 </html>
