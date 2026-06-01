@@ -178,25 +178,23 @@ function calculate() {
     return; 
   }
 
+  // Якщо бази немає, записуємо перші введені дані як початкову точку відліку
   if(!state.prev) {
-    state.prev = { t1: цей_міс_кв1_day, t2: цей_міс_кв1_ніч, v181: цей_міс_заг_день, v182: цей_міс_заг_ніч };
-    state.prev.t1 = цей_міс_кв1_день;
+    state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v181: цей_міс_заг_день, v182: цей_міс_заг_ніч };
     localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
     renderPrev();
-    showToast('💾 Базу записано!');
+    showToast('💾 Стартову базу записано! Наступний розрахунок видасть результат.');
     return;
   }
 
-  // --- МАТЕМАТИКА З ПРОСТИМИ НАЗВАМИ ЗМІННИХ ---
-  
-  // Квартира 1 (Різниця та Суми)
+  // Розрахунки Квартири №1
   const кв1_різниця_день = цей_міс_кв1_день - state.prev.t1;
   const кв1_різниця_ніч = цей_міс_кв1_ніч - state.prev.t2;
-  const кв1_сума_день = кв1_різниця_day = кв1_різниця_день * ціна;
+  const кв1_сума_день = кв1_різниця_день * ціна;
   const кв1_сума_ніч = (кв1_різниця_ніч * ціна) / 2;
   const кв1_разом = кв1_сума_день + кв1_сума_ніч;
 
-  // Загальні показники по всьому дому
+  // Розрахунки Загальних показників лічильника
   const заг_різниця_день = цей_міс_заг_день - state.prev.v181;
   const заг_різниця_ніч = цей_міс_заг_ніч - state.prev.v182;
   const заг_всього_квт = заг_різниця_день + заг_різниця_ніч;
@@ -204,7 +202,7 @@ function calculate() {
   const заг_сума_ніч = (заг_різниця_ніч * ціна) / 2;
   const заг_разом_грн = заг_сума_день + заг_сума_ніч;
 
-  // Квартира 2 (Загальне мінус Квартира 1)
+  // Розрахунки Квартири №2 (Різниця загального лічильника та першої квартири)
   const кв2_різниця_день = заг_різниця_день - кв1_різниця_день;
   const кв2_різниця_ніч = заг_різниця_ніч - кв1_різниця_ніч;
   const кв2_сума_день = кв2_різниця_день * ціна;
@@ -216,7 +214,7 @@ function calculate() {
     return;
   }
 
-  // Вивід на екран результату
+  // Виведення результату
   document.getElementById('resHeaderTotal').textContent = `Всього до сплати по дому: ${заг_разом_грн.toFixed(2)} грн`;
   document.getElementById('resColumns').innerHTML = buildColumnsHTML({
     заг_різниця_день, заг_різниця_ніч, заг_всього_квт, заг_сума_день, заг_сума_ніч, заг_разом_грн,
@@ -225,7 +223,7 @@ function calculate() {
   });
   document.getElementById('resultBox').style.display = 'block';
 
-  // Пакет для збереження в історію
+  // Пакет запису для історії
   const record = {
     id: Date.now(),
     date: new Date().toLocaleString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -239,7 +237,7 @@ function calculate() {
   state.history.unshift(record);
   localStorage.setItem('svitlo_history', JSON.stringify(state.history));
   
-  // Оновлюємо базу на наступний місяць
+  // Поточні дані стають базою на наступний раз
   state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v181: цей_міс_заг_день, v182: цей_міс_заг_ніч };
   localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
   
@@ -252,7 +250,7 @@ function buildColumnsHTML(d) {
   return `
     <div class="col-block">
       <div class="col-block-title">Загальні</div>
-      <div class="data-item"><span>Різниця День</span><strong>${d.заг_різниця_day = d.заг_різниця_day = d.заг_різниця_день.toFixed(3)}</strong></div>
+      <div class="data-item"><span>Різниця День</span><strong>${d.заг_різниця_день.toFixed(3)}</strong></div>
       <div class="data-item"><span>Різниця Ніч</span><strong>${d.заг_різниця_ніч.toFixed(3)}</strong></div>
       <div class="data-item"><span>Всього кВт</span><strong>${d.заг_всього_квт.toFixed(3)}</strong></div>
       <div class="data-item"><span>Ціна День</span><strong>${d.заг_сума_день.toFixed(2)} ₴</strong></div>
