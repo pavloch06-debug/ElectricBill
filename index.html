@@ -832,7 +832,19 @@ document.getElementById('btnCloseBanner').addEventListener('click', () => {
 });
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          showToast('🔄 Оновлення калькулятора...');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      });
+    });
+  }).catch(() => {});
 }
 
 init();
