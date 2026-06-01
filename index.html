@@ -26,47 +26,56 @@
     --yellow: #ffd000;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'JetBrains Mono', monospace; -webkit-tap-highlight-color: transparent; }
-  body { background: var(--bg); color: var(--text); padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
-  h1 { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 700; text-align: center; margin: 10px 0 20px; color: var(--text); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  body { background: var(--bg); color: var(--text); padding: 12px; max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
+  h1 { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 700; text-align: center; margin: 10px 0 15px; color: var(--text); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; }
   h1 span { color: var(--accent); }
   
-  /* Завжди видима кнопка встановлення */
   .pwa-btn-card { background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(255,107,53,0.1)); border: 1px solid var(--accent); border-radius: 14px; padding: 12px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .pwa-btn-text { font-size: 11px; font-weight: 600; line-height: 1.4; }
   .pwa-btn-text strong { color: var(--accent); display: block; font-size: 12px; }
   .btn-pwa-install { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 14px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
   .card-title { font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .input-group { margin-bottom: 12px; position: relative; }
-  .input-group:last-child { margin-bottom: 0; }
-  label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
-  input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: #fff; font-size: 15px; font-weight: 600; outline: none; transition: all 0.2s; }
-  input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,255,0.1); }
-  .btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,212,255,0.2); transition: all 0.2s; font-family: 'Unbounded', sans-serif; }
-  .btn:active { transform: scale(0.98); opacity: 0.9; }
-  .btn-danger { background: transparent; border: 1px solid var(--border); color: var(--danger); box-shadow: none; margin-top: 8px; padding: 10px; font-size: 11px; }
-  .btn-edit { background: var(--surface2); border: 1px solid var(--border); color: var(--yellow); padding: 6px 12px; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; }
-  #resultBox { display: none; background: linear-gradient(135deg, var(--surface), var(--surface2)); border-left: 4px solid var(--accent3); }
-  .res-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
-  .res-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .res-total { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent3); text-align: right; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
-  .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: 12px; position: relative; }
-  .history-date { font-size: 10px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
-  .history-del { position: absolute; top: 10px; right: 10px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px; }
-  .history-del:hover { color: var(--danger); }
-  .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.05); }
-  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; pointer-events: none; white-space: nowrap; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .input-group { margin-bottom: 10px; position: relative; }
+  label { display: block; font-size: 10px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+  input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: #fff; font-size: 14px; font-weight: 600; outline: none; }
+  input:focus { border-color: var(--accent); }
+  
+  .btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 12px; padding: 14px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; font-family: 'Unbounded', sans-serif; box-shadow: 0 4px 12px rgba(0,212,255,0.2); }
+  .btn:active { transform: scale(0.98); }
+  .btn-danger { background: transparent; border: 1px solid var(--border); color: var(--danger); margin-top: 8px; padding: 8px; font-size: 10px; }
+  .btn-edit { background: var(--surface2); border: 1px solid var(--border); color: var(--yellow); padding: 6px 12px; font-size: 10px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 6px; }
+
+  /* Трьохколонкова структура результатів та історії */
+  .columns-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .col-block { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 8px; }
+  .col-block-title { font-size: 10px; font-weight: 700; text-transform: uppercase; text-align: center; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 6px; color: var(--accent); }
+  .col-block:nth-child(2) .col-block-title { color: var(--accent2); }
+  .col-block:nth-child(3) .col-block-title { color: var(--accent3); }
+  
+  .data-item { font-size: 10px; margin-bottom: 5px; line-height: 1.3; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 3px; }
+  .data-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .data-item span { color: var(--muted); display: block; font-size: 9px; }
+  .data-item strong { color: var(--text); }
+
+  #resultBox { display: none; }
+  .res-header-total { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent3); text-align: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
+  
+  .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 12px; position: relative; }
+  .history-date { font-size: 10px; color: var(--yellow); margin-bottom: 6px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+  .history-del { position: absolute; top: 10px; right: 10px; color: var(--muted); background: none; border: none; cursor: pointer; font-size: 14px; }
+  
+  #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); transition: transform 0.3s; z-index: 1000; }
   #toast.show { transform: translateX(-50%) translateY(0); }
-  .prev-badge { background: rgba(0,212,255,0.05); border: 1px dashed rgba(0,212,255,0.2); border-radius: 8px; padding: 8px; margin-bottom: 12px; font-size: 11px; line-height: 1.5; }
+  .prev-badge { background: rgba(0,212,255,0.04); border: 1px dashed rgba(0,212,255,0.15); border-radius: 10px; padding: 8px; margin-bottom: 8px; font-size: 11px; line-height: 1.4; }
 </style>
 </head>
 <body>
 
 <h1>⚡ СВІТЛО<span>.calc</span></h1>
 
-<!-- КНОПКА ВСТАНОВЛЕННЯ, ЯКА ТУТ ЗАВЖДИ -->
 <div class="pwa-btn-card" id="alwaysInstallCard">
   <div class="pwa-btn-text">
     <strong>📲 Додати на екран</strong>
@@ -75,30 +84,18 @@
   <button class="btn-pwa-install" id="btnAlwaysInstall">Встановити</button>
 </div>
 
-<!-- ПОТОЧНІ ПОКАЗНИКИ -->
+<!-- ВВЕДЕННЯ ПОКАЗНИКІВ -->
 <div class="card">
-  <div class="card-title">Поточні показники (Цей місяць)</div>
+  <div class="card-title">Показники за цей місяць</div>
   <div class="grid-2">
-    <div class="input-group">
-      <label>T1 (День)</label>
-      <input type="number" step="0.001" id="curr_t1" placeholder="0.000">
-    </div>
-    <div class="input-group">
-      <label>T2 (Ніч)</label>
-      <input type="number" step="0.001" id="curr_t2" placeholder="0.000">
-    </div>
+    <div class="input-group"><label>T1 Кв1 (День)</label><input type="number" step="0.001" id="curr_t1" placeholder="0.000"></div>
+    <div class="input-group"><label>T2 Кв1 (Ніч)</label><input type="number" step="0.001" id="curr_t2" placeholder="0.000"></div>
   </div>
-  <div class="grid-2" style="margin-top: 12px;">
-    <div class="input-group">
-      <label>Показник 1.8.1</label>
-      <input type="number" step="0.001" id="curr_v181" placeholder="0.000">
-    </div>
-    <div class="input-group">
-      <label>Показник 1.8.2</label>
-      <input type="number" step="0.001" id="curr_v182" placeholder="0.000">
-    </div>
+  <div class="grid-2">
+    <div class="input-group"><label>1.8.1 Загальний (День)</label><input type="number" step="0.001" id="curr_v181" placeholder="0.000"></div>
+    <div class="input-group"><label>1.8.2 Загальний (Ніч)</label><input type="number" step="0.001" id="curr_v182" placeholder="0.000"></div>
   </div>
-  <div class="input-group" style="margin-top: 12px;">
+  <div class="input-group" style="margin-top: 4px;">
     <label>Ціна за кВт⋅год (грн)</label>
     <input type="number" step="0.01" id="price" value="4.32">
   </div>
@@ -106,21 +103,19 @@
 
 <button class="btn" id="btnCalc">Розрахувати</button>
 
-<!-- РЕЗУЛЬТАТ -->
+<!-- РЕЗУЛЬТАТ РОЗРАХУНКУ -->
 <div class="card" id="resultBox">
   <div class="card-title">Результат розрахунку</div>
-  <div id="resDetails"></div>
-  <div class="res-total" id="resTotal">0.00 грн</div>
+  <div class="res-header-total" id="resHeaderTotal">Всього: 0.00 грн</div>
+  <div class="columns-3" id="resColumns"></div>
 </div>
 
-<!-- ПОПЕРЕДНІ ЗНАЧЕННЯ -->
+<!-- БАЗА ПОПЕРЕДНЬОГО МІСЯЦЯ -->
 <div class="card">
   <div class="card-title">Попередній місяць (База)</div>
   <div id="prevBadge" class="prev-badge">Немає збережених даних</div>
-  <div id="prevEditActions" style="display:none; gap:8px;">
-    <button class="btn-edit" id="btnEditPrev">✏️ Редагувати базу</button>
-  </div>
-  <button class="btn btn-danger" id="btnClearPrev">Скинути базу попереднього місяця</button>
+  <div id="prevEditActions" style="display:none;"><button class="btn-edit" id="btnEditPrev">✏️ Редагувати базу</button></div>
+  <button class="btn btn-danger" id="btnClearPrev">Скинути базу</button>
 </div>
 
 <!-- ІСТОРІЯ -->
@@ -140,12 +135,10 @@ let state = {
 document.addEventListener('DOMContentLoaded', () => {
   renderPrev();
   renderHistory();
-  
   document.getElementById('btnCalc').addEventListener('click', calculate);
   document.getElementById('btnClearPrev').addEventListener('click', clearPrev);
   document.getElementById('btnEditPrev').addEventListener('click', editPrev);
-  
-  // Якщо додаток вже запущено як PWA, ховаємо верхню панель встановлення
+
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     document.getElementById('alwaysInstallCard').style.display = 'none';
   }
@@ -155,40 +148,28 @@ function renderPrev() {
   const b = document.getElementById('prevBadge');
   const actions = document.getElementById('prevEditActions');
   if(!state.prev) {
-    b.innerHTML = 'Немає збережених даних. Перший розрахунок запише ці значення як стартові.';
+    b.innerHTML = 'Введіть дані першого місяця. Розрахунок збереже їх як стартову базу.';
     actions.style.display = 'none';
     return;
   }
   b.innerHTML = `
-    <strong>Минулі показники:</strong><br>
-    T1: ${parseFloat(state.prev.t1).toFixed(3)} | T2: ${parseFloat(state.prev.t2).toFixed(3)}<br>
-    1.8.1: ${parseFloat(state.prev.v181).toFixed(3)} | 1.8.2: ${parseFloat(state.prev.v182).toFixed(3)}
+    T1: ${state.prev.t1.toFixed(3)} | T2: ${state.prev.t2.toFixed(3)}<br>
+    1.8.1: ${state.prev.v181.toFixed(3)} | 1.8.2: ${state.prev.v182.toFixed(3)}
   `;
   actions.style.display = 'block';
 }
 
 function editPrev() {
   if(!state.prev) return;
-  
-  const newT1 = prompt("Введіть нове значення для T1 (День):", state.prev.t1);
-  if (newT1 === null) return; 
-  const newT2 = prompt("Введіть нове значення для T2 (Ніч):", state.prev.t2);
-  if (newT2 === null) return;
-  const newV1 = prompt("Введіть нове значення для 1.8.1:", state.prev.v181);
-  if (newV1 === null) return;
-  const newV2 = prompt("Введіть нове значення для 1.8.2:", state.prev.v182);
-  if (newV2 === null) return;
+  const nT1 = prompt("Минулий T1 Кв1:", state.prev.t1); if (nT1 === null) return;
+  const nT2 = prompt("Минулий T2 Кв1:", state.prev.t2); if (nT2 === null) return;
+  const nV1 = prompt("Минулий Загальний 1.8.1:", state.prev.v181); if (nV1 === null) return;
+  const nV2 = prompt("Минулий Загальний 1.8.2:", state.prev.v182); if (nV2 === null) return;
 
-  state.prev = {
-    t1: parseFloat(newT1) || 0,
-    t2: parseFloat(newT2) || 0,
-    v181: parseFloat(newV1) || 0,
-    v182: parseFloat(newV2) || 0
-  };
-  
+  state.prev = { t1: parseFloat(nT1)||0, t2: parseFloat(nT2)||0, v181: parseFloat(nV1)||0, v182: parseFloat(nV2)||0 };
   localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
   renderPrev();
-  showToast('✏️ Попередні дані успішно змінено!');
+  showToast('✏️ Базу змінено!');
 }
 
 function calculate() {
@@ -198,51 +179,58 @@ function calculate() {
   const c_v182 = parseFloat(document.getElementById('curr_v182').value) || 0;
   const p = parseFloat(document.getElementById('price').value) || 0;
 
-  if(!c_t1 || !c_t2 || !c_v181 || !c_v182) {
-    showToast('❌ Заповніть всі показники!');
-    return;
-  }
+  if(!c_t1 || !c_t2 || !c_v181 || !c_v182) { showToast('❌ Заповніть всі поля!'); return; }
 
   if(!state.prev) {
     state.prev = { t1: c_t1, t2: c_t2, v181: c_v181, v182: c_v182 };
     localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
     renderPrev();
-    showToast('💾 Стартові дані збережено! Наступний розрахунок покаже результат.');
+    showToast('💾 Стартову базу записано!');
     return;
   }
 
+  // --- МАТЕМАТИКА ЗА НОВИМИ ФОРМУЛАМИ ---
+  // Квартира 1
   const t1rez = c_t1 - state.prev.t1;
   const t2rez = c_t2 - state.prev.t2;
-
-  if (t1rez < 0 || t2rez < 0) {
-    showToast('⚠️ Поточні показники менші за попередні!');
-    return;
-  }
-
   const t1sum = t1rez * p;
   const t2sum = (t2rez * p) / 2;
   const tsum = t1sum + t2sum;
 
-  const html = `
-    <div class="res-row"><span>T1 (Цей місяць):</span><strong>${c_t1.toFixed(3)}</strong></div>
-    <div class="res-row"><span>T2 (Цей місяць):</span><strong>${c_t2.toFixed(3)}</strong></div>
-    <div class="res-row"><span>T1rez (Різниця T1):</span><strong>${t1rez.toFixed(3)} кВт</strong></div>
-    <div class="res-row"><span>T2rez (Різниця T2):</span><strong>${t2rez.toFixed(3)} кВт</strong></div>
-    <div class="res-row"><span>T1sum (Сума День):</span><strong>${t1sum.toFixed(2)} грн</strong></div>
-    <div class="res-row"><span>T2sum (Сума Ніч):</span><strong>${t2sum.toFixed(2)} грн</strong></div>
-  `;
-  
-  document.getElementById('resDetails').innerHTML = html;
-  document.getElementById('resTotal').textContent = `${tsum.toFixed(2)} грн`;
+  // Загальні показники
+  const v181allrez = c_v181 - state.prev.v181;
+  const v182allrez = c_v182 - state.prev.v182;
+  const allKw = v181allrez + v182allrez;
+  const price_day = v181allrez * p;
+  const price_night = (v182allrez * p) / 2; // Виправлено ділення нічного лічильника загального на 2
+  const total_all_price = price_day + price_night;
+
+  // Квартира 2 (Різниця)
+  const v181rez = v181allrez - t1rez;
+  const v182rez = v182allrez - t2rez;
+  const v181sum = v181rez * p;
+  const v182sum = (v182rez * p) / 2;
+  const v18sum = v181sum + v182sum;
+
+  if(t1rez < 0 || t2rez < 0 || v181allrez < 0 || v182allrez < 0 || v181rez < 0 || v182rez < 0) {
+    showToast('⚠️ Помилка: Показники менші за минулий місяць!');
+    return;
+  }
+
+  // Вивід на екран
+  document.getElementById('resHeaderTotal').textContent = `Всього по дому: ${total_all_price.toFixed(2)} грн`;
+  document.getElementById('resColumns').innerHTML = buildColumnsHTML({
+    c_t1, c_t2, c_v181, c_v182, v181allrez, v182allrez, allKw, price_day, price_night, total_all_price,
+    t1rez, t2rez, t1sum, t2sum, tsum,
+    v181rez, v182rez, v181sum, v182sum, v18sum
+  });
   document.getElementById('resultBox').style.display = 'block';
 
+  // Збереження
   const record = {
     id: Date.now(),
-    date: new Date().toLocaleString('uk-UA'),
-    c_t1, c_t2,
-    t1rez, t2rez,
-    t1sum, t2sum,
-    tsum
+    date: new Date().toLocaleString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+    data: { v181allrez, v182allrez, allKw, price_day, price_night, total_all_price, c_t1, c_t2, t1rez, t2rez, t1sum, t2sum, tsum, c_v181, c_v182, v181rez, v182rez, v181sum, v182sum, v18sum }
   };
 
   state.history.unshift(record);
@@ -256,26 +244,52 @@ function calculate() {
   showToast('✅ Розраховано та збережено!');
 }
 
+function buildColumnsHTML(d) {
+  return `
+    <!-- Колонна 1 -->
+    <div class="col-block">
+      <div class="col-block-title">Загальні</div>
+      <div class="data-item"><span>1.8.1 all rez</span><strong>${d.v181allrez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>1.8.2 all rez</span><strong>${d.v182allrez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>all Kw</span><strong>${d.allKw.toFixed(3)} кВт</strong></div>
+      <div class="data-item"><span>Ціна день</span><strong>${d.price_day.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span>Ціна ніч</span><strong>${d.price_night.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span style="color:var(--accent)">Вся ціна</span><strong>${d.total_all_price.toFixed(2)} ₴</strong></div>
+    </div>
+    <!-- Колонна 2 -->
+    <div class="col-block">
+      <div class="col-block-title">Кв №1</div>
+      <div class="data-item"><span>T1 цей міс</span><strong>${d.c_t1.toFixed(3)}</strong></div>
+      <div class="data-item"><span>T2 цей міс</span><strong>${d.c_t2.toFixed(3)}</strong></div>
+      <div class="data-item"><span>T1 rez</span><strong>${d.t1rez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>T2 rez</span><strong>${d.t2rez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>T1 sum</span><strong>${d.t1sum.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span>T2 sum</span><strong>${d.t2sum.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span style="color:var(--accent2)">Tsum</span><strong>${d.tsum.toFixed(2)} ₴</strong></div>
+    </div>
+    <!-- Колонна 3 -->
+    <div class="col-block">
+      <div class="col-block-title">Кв №2</div>
+      <div class="data-item"><span>1.8.1 цей міс</span><strong>${d.c_v181.toFixed(3)}</strong></div>
+      <div class="data-item"><span>1.8.2 цей міс</span><strong>${d.c_v182.toFixed(3)}</strong></div>
+      <div class="data-item"><span>1.8.1 rez</span><strong>${d.v181rez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>1.8.2 rez</span><strong>${d.v182rez.toFixed(3)}</strong></div>
+      <div class="data-item"><span>1.8.1 sum</span><strong>${d.v181sum.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span>1.8.2 sum</span><strong>${d.v182sum.toFixed(2)} ₴</strong></div>
+      <div class="data-item"><span style="color:var(--accent3)">1.8 sum</span><strong>${d.v18sum.toFixed(2)} ₴</strong></div>
+    </div>
+  `;
+}
+
 function renderHistory() {
   const container = document.getElementById('historyList');
-  if(state.history.length === 0) {
-    container.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">Історія порожня</div>';
-    return;
-  }
+  if(state.history.length === 0) { container.innerHTML = '<div style="color:var(--muted); font-size:11px; text-align:center; padding:10px;">Історія порожня</div>'; return; }
 
   container.innerHTML = state.history.map(item => `
     <div class="history-item">
-      <div class="history-date">${item.date}</div>
-      <button class="history-del" onclick="deleteHistory(${item.id})">×</button>
-      <div><strong>Разом до сплати: <span style="color:var(--accent3)">${item.tsum.toFixed(2)} грн</span></strong></div>
-      <div class="history-grid">
-        <div>T1 цей міс: ${item.c_t1.toFixed(3)}</div>
-        <div>T2 цей міс: ${item.c_t2.toFixed(3)}</div>
-        <div>T1rez: ${item.t1rez.toFixed(3)}</div>
-        <div>T2rez: ${item.t2rez.toFixed(3)}</div>
-        <div>T1sum: ${item.t1sum.toFixed(2)} грн</div>
-        <div>T2sum: ${item.t2sum.toFixed(2)} грн</div>
-      </div>
+      <div class="history-date">📅 Подано: ${item.date}</div>
+      <button class="history-del" onclick="deleteHistory(${item.id})">✕</button>
+      <div class="columns-3">${buildColumnsHTML(item.data)}</div>
     </div>
   `).join('');
 }
@@ -288,41 +302,22 @@ window.deleteHistory = function(id) {
 };
 
 function clearPrev() {
-  if(confirm('Ви дійсно хочете скинути базу попереднього місяця?')) {
-    state.prev = null;
-    localStorage.removeItem('svitlo_prev');
-    renderPrev();
-    showToast('🗑️ Базу скинуто');
-  }
+  if(confirm('Скинути базу?')) { state.prev = null; localStorage.removeItem('svitlo_prev'); renderPrev(); showToast('🗑️ Базу скинуто'); }
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ПЕРЕХВАТ ІГНОРУВАННЯ ТА ОБРОБКА КНОПКИ
+// Реєстрація PWA та обробка кнопки
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
 document.getElementById('btnAlwaysInstall').addEventListener('click', async () => {
   if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    if (outcome === 'accepted') {
-      showToast('✅ Додаток встановлено!');
-      document.getElementById('alwaysInstallCard').style.display = 'none';
-    }
-  } else {
-    // Якщо браузер не створив подію автоматично, даємо інструкцію
-    alert("Натисни на кнопку 'три крапки' вгорі Chrome або 'Поділитись' в Safari та вибери 'Додати на головний екран'.");
-  }
+    deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null;
+    if (outcome === 'accepted') { showToast('✅ Встановлено!'); document.getElementById('alwaysInstallCard').style.display = 'none'; }
+  } else { alert("Натисни на 'три крапки' в меню Chrome та вибери 'Додати на головний екран'."); }
 });
 
 if ('serviceWorker' in navigator) {
