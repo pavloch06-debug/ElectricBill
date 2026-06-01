@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0f1923">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,11 +35,12 @@
   .input-group { margin-bottom: 12px; position: relative; }
   .input-group:last-child { margin-bottom: 0; }
   label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
-  input { wwidth: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: #fff; font-size: 15px; font-weight: 600; outline: none; transition: all 0.2s; }
+  input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: #fff; font-size: 15px; font-weight: 600; outline: none; transition: all 0.2s; }
   input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,255,0.1); }
   .btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,212,255,0.2); transition: all 0.2s; font-family: 'Unbounded', sans-serif; }
   .btn:active { transform: scale(0.98); opacity: 0.9; }
   .btn-danger { background: transparent; border: 1px solid var(--border); color: var(--danger); box-shadow: none; margin-top: 8px; padding: 10px; font-size: 11px; }
+  .btn-edit { background: var(--surface2); border: 1px solid var(--border); color: var(--yellow); padding: 6px 12px; font-size: 11px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; }
   #resultBox { display: none; background: linear-gradient(135deg, var(--surface), var(--surface2)); border-left: 4px solid var(--accent3); }
   .res-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
   .res-row:last-child { border-bottom: none; padding-bottom: 0; }
@@ -102,6 +103,9 @@
 <div class="card">
   <div class="card-title">Попередній місяць (База)</div>
   <div id="prevBadge" class="prev-badge">Немає збережених даних</div>
+  <div id="prevEditActions" style="display:none; gap:8px;">
+    <button class="btn-edit" id="btnEditPrev">✏️ Редагувати базу</button>
+  </div>
   <button class="btn btn-danger" id="btnClearPrev">Скинути базу попереднього місяця</button>
 </div>
 
@@ -121,25 +125,26 @@
 </div>
 
 <script>
-// Стан додатка
 let state = {
   prev: JSON.parse(localStorage.getItem('svitlo_prev')) || null,
   history: JSON.parse(localStorage.getItem('svitlo_history')) || []
 };
 
-// Ініціалізація
 document.addEventListener('DOMContentLoaded', () => {
   renderPrev();
   renderHistory();
   
   document.getElementById('btnCalc').addEventListener('click', calculate);
   document.getElementById('btnClearPrev').addEventListener('click', clearPrev);
+  document.getElementById('btnEditPrev').addEventListener('click', editPrev);
 });
 
 function renderPrev() {
   const b = document.getElementById('prevBadge');
+  const actions = document.getElementById('prevEditActions');
   if(!state.prev) {
     b.innerHTML = 'Немає збережених даних. Перший розрахунок запише ці значення як стартові.';
+    actions.style.display = 'none';
     return;
   }
   b.innerHTML = `
@@ -147,6 +152,31 @@ function renderPrev() {
     T1: ${parseFloat(state.prev.t1).toFixed(3)} | T2: ${parseFloat(state.prev.t2).toFixed(3)}<br>
     1.8.1: ${parseFloat(state.prev.v181).toFixed(3)} | 1.8.2: ${parseFloat(state.prev.v182).toFixed(3)}
   `;
+  actions.style.display = 'block';
+}
+
+function editPrev() {
+  if(!state.prev) return;
+  
+  const newT1 = prompt("Введіть нове значення для T1 (День):", state.prev.t1);
+  if (newT1 === null) return; 
+  const newT2 = prompt("Введіть нове значення для T2 (Ніч):", state.prev.t2);
+  if (newT2 === null) return;
+  const newV1 = prompt("Введіть нове значення для 1.8.1:", state.prev.v181);
+  if (newV1 === null) return;
+  const newV2 = prompt("Введіть нове значення для 1.8.2:", state.prev.v182);
+  if (newV2 === null) return;
+
+  state.prev = {
+    t1: parseFloat(newT1) || 0,
+    t2: parseFloat(newT2) || 0,
+    v181: parseFloat(newV1) || 0,
+    v182: parseFloat(newV2) || 0
+  };
+  
+  localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
+  renderPrev();
+  showToast('✏️ Попередні дані успішно змінено!');
 }
 
 function calculate() {
@@ -161,7 +191,6 @@ function calculate() {
     return;
   }
 
-  // Якщо немає попередніх даних, зберігаємо поточні як початкові
   if(!state.prev) {
     state.prev = { t1: c_t1, t2: c_t2, v181: c_v181, v182: c_v182 };
     localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
@@ -170,7 +199,6 @@ function calculate() {
     return;
   }
 
-  // Розрахунок за новою формулою
   const t1rez = c_t1 - state.prev.t1;
   const t2rez = c_t2 - state.prev.t2;
 
@@ -183,7 +211,6 @@ function calculate() {
   const t2sum = (t2rez * p) / 2;
   const tsum = t1sum + t2sum;
 
-  // Формуємо деталі для екрану результату
   const html = `
     <div class="res-row"><span>T1 (Цей місяць):</span><strong>${c_t1.toFixed(3)}</strong></div>
     <div class="res-row"><span>T2 (Цей місяць):</span><strong>${c_t2.toFixed(3)}</strong></div>
@@ -197,7 +224,6 @@ function calculate() {
   document.getElementById('resTotal').textContent = `${tsum.toFixed(2)} грн`;
   document.getElementById('resultBox').style.display = 'block';
 
-  // Зберігаємо запис в історію
   const record = {
     id: Date.now(),
     date: new Date().toLocaleString('uk-UA'),
@@ -210,7 +236,6 @@ function calculate() {
   state.history.unshift(record);
   localStorage.setItem('svitlo_history', JSON.stringify(state.history));
   
-  // Поточні стають попередніми для наступного місяця
   state.prev = { t1: c_t1, t2: c_t2, v181: c_v181, v182: c_v182 };
   localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
   
@@ -266,7 +291,6 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Реєстрація сервіс-воркера та автооновлення
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').then(reg => {
     reg.addEventListener('updatefound', () => {
