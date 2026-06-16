@@ -46,6 +46,8 @@
   .btn:active { transform: scale(0.98); }
   .btn-danger { background: transparent; border: 1px solid var(--border); color: var(--danger); margin-top: 8px; padding: 8px; font-size: 10px; }
   .btn-edit { background: var(--surface2); border: 1px solid var(--border); color: var(--yellow); padding: 6px 12px; font-size: 10px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 6px; }
+  .share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .btn-share { background: var(--surface2); border: 1px solid var(--border); color: var(--accent); padding: 8px; font-size: 11px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
   .columns-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px; }
   .col-block { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 8px; }
@@ -89,8 +91,8 @@
     <div class="input-group"><label>T2 Кв1 (Ніч)</label><input type="number" step="0.001" id="curr_t2" placeholder="0.000"></div>
   </div>
   <div class="grid-2">
-    <div class="input-group"><label>1.8.1 Загальний (День)</label><input type="number" step="0.001" id="curr_v181" placeholder="0.000"></div>
-    <div class="input-group"><label>1.8.2 Загальний (Ніч)</label><input type="number" step="0.001" id="curr_v182" placeholder="0.000"></div>
+    <div class="input-group"><label>1.8.2 Загальний (День)</label><input type="number" step="0.001" id="curr_v182" placeholder="0.000"></div>
+    <div class="input-group"><label>1.8.1 Загальний (Ніч)</label><input type="number" step="0.001" id="curr_v181" placeholder="0.000"></div>
   </div>
   <div class="input-group" style="margin-top: 4px;">
     <label>Ціна за кВт⋅год (грн)</label>
@@ -111,6 +113,11 @@
   <div id="prevBadge" class="prev-badge">Немає збережених даних</div>
   <div id="prevEditActions" style="display:none;"><button class="btn-edit" id="btnEditPrev">✏️ Редагувати базу</button></div>
   <button class="btn btn-danger" id="btnClearPrev">Скинути базу</button>
+  
+  <div class="share-grid">
+    <button class="btn-share" id="btnExport">📋 Скопіювати базу</button>
+    <button class="btn-share" id="btnImport">📥 Вставити базу</button>
+  </div>
 </div>
 
 <div class="card">
@@ -132,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnCalc').addEventListener('click', calculate);
   document.getElementById('btnClearPrev').addEventListener('click', clearPrev);
   document.getElementById('btnEditPrev').addEventListener('click', editPrev);
+  document.getElementById('btnExport').addEventListener('click', exportData);
+  document.getElementById('btnImport').addEventListener('click', importData);
 
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     document.getElementById('alwaysInstallCard').style.display = 'none';
@@ -148,19 +157,19 @@ function renderPrev() {
   }
   b.innerHTML = `
     Минулі Кв1 - День: ${state.prev.t1.toFixed(3)} | Ніч: ${state.prev.t2.toFixed(3)}<br>
-    Минулі Загальні - День: ${state.prev.v181.toFixed(3)} | Ніч: ${state.prev.v182.toFixed(3)}
+    Минулі Загальні - День: ${state.prev.v182.toFixed(3)} | Ніч: ${state.prev.v181.toFixed(3)}
   `;
   actions.style.display = 'block';
 }
 
 function editPrev() {
   if(!state.prev) return;
-  const nT1 = prompt("Минулий T1 Кв1:", state.prev.t1); if (nT1 === null) return;
-  const nT2 = prompt("Минулий T2 Кв1:", state.prev.t2); if (nT2 === null) return;
-  const nV1 = prompt("Минулий Загальний 1.8.1:", state.prev.v181); if (nV1 === null) return;
-  const nV2 = prompt("Минулий Загальний 1.8.2:", state.prev.v182); if (nV2 === null) return;
+  const nT1 = prompt("Минулий T1 Кв1 (День):", state.prev.t1); if (nT1 === null) return;
+  const nT2 = prompt("Минулий T2 Кв1 (Ніч):", state.prev.t2); if (nT2 === null) return;
+  const nV2 = prompt("Минулий Загальний 1.8.2 (День):", state.prev.v182); if (nV2 === null) return;
+  const nV1 = prompt("Минулий Загальний 1.8.1 (Ніч):", state.prev.v181); if (nV1 === null) return;
 
-  state.prev = { t1: parseFloat(nT1)||0, t2: parseFloat(nT2)||0, v181: parseFloat(nV1)||0, v182: parseFloat(nV2)||0 };
+  state.prev = { t1: parseFloat(nT1)||0, t2: parseFloat(nT2)||0, v182: parseFloat(nV2)||0, v181: parseFloat(nV1)||0 };
   localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
   renderPrev();
   showToast('✏️ Базу змінено!');
@@ -169,8 +178,8 @@ function editPrev() {
 function calculate() {
   const цей_міс_кв1_день = parseFloat(document.getElementById('curr_t1').value) || 0;
   const цей_міс_кв1_ніч = parseFloat(document.getElementById('curr_t2').value) || 0;
-  const цей_міс_заг_день = parseFloat(document.getElementById('curr_v181').value) || 0;
-  const цей_міс_заг_ніч = parseFloat(document.getElementById('curr_v182').value) || 0;
+  const цей_міс_заг_день = parseFloat(document.getElementById('curr_v182').value) || 0;
+  const цей_міс_заг_ніч = parseFloat(document.getElementById('curr_v181').value) || 0;
   const ціна = parseFloat(document.getElementById('price').value) || 0;
 
   if(!цей_міс_кв1_день || !цей_міс_кв1_ніч || !цей_міс_заг_день || !цей_міс_заг_ніч) { 
@@ -178,35 +187,36 @@ function calculate() {
     return; 
   }
 
-  // Якщо бази немає, записуємо перші введені дані як початкову точку відліку
   if(!state.prev) {
-    state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v181: цей_міс_заг_день, v182: цей_міс_заг_ніч };
+    state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v182: цей_міс_заг_день, v181: цей_міс_заг_ніч };
     localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
     renderPrev();
-    showToast('💾 Стартову базу записано! Наступний розрахунок видасть результат.');
+    showToast('💾 Стартову базу записано!');
     return;
   }
 
-  // Розрахунки Квартири №1
+  // --- МАТЕМАТИКА З УРАХУВАННЯМ: 1.8.2 = ДЕНЬ, 1.8.1 = НІЧ ---
+  
+  // Квартира 1
   const кв1_різниця_день = цей_міс_кв1_день - state.prev.t1;
   const кв1_різниця_ніч = цей_міс_кв1_ніч - state.prev.t2;
-  const кв1_сума_день = кв1_різниця_день * ціна;
-  const кв1_сума_ніч = (кв1_різниця_ніч * ціна) / 2;
+  const кв1_сума_день = кв1_різниця_day = кв1_різниця_день * ціна;
+  const кв1_сума_ніч = (кв1_різниця_ніч * ціна) / 2; // Ніч ділимо на 2
   const кв1_разом = кв1_сума_день + кв1_сума_ніч;
 
-  // Розрахунки Загальних показників лічильника
-  const заг_різниця_день = цей_міс_заг_день - state.prev.v181;
-  const заг_різниця_ніч = цей_міс_заг_ніч - state.prev.v182;
+  // Загальні по дому
+  const заг_різниця_день = цей_міс_заг_день - state.prev.v182;
+  const заг_різниця_ніч = цей_міс_заг_ніч - state.prev.v181;
   const заг_всього_квт = заг_різниця_день + заг_різниця_ніч;
   const заг_сума_день = заг_різниця_день * ціна;
-  const заг_сума_ніч = (заг_різниця_ніч * ціна) / 2;
+  const заг_сума_ніч = (заг_різниця_ніч * ціна) / 2; // Ніч ділимо на 2
   const заг_разом_грн = заг_сума_день + заг_сума_ніч;
 
-  // Розрахунки Квартири №2 (Різниця загального лічильника та першої квартири)
+  // Квартира 2 (Загальне мінус Кв1)
   const кв2_різниця_день = заг_різниця_день - кв1_різниця_день;
   const кв2_різниця_ніч = заг_різниця_ніч - кв1_різниця_ніч;
   const кв2_сума_день = кв2_різниця_день * ціна;
-  const кв2_сума_ніч = (кв2_різниця_ніч * ціна) / 2;
+  const кв2_сума_ніч = (кв2_різниця_ніч * ціна) / 2; // Ніч ділимо на 2
   const кв2_разом = кв2_сума_день + кв2_сума_ніч;
 
   if(кв1_різниця_день < 0 || кв1_різниця_ніч < 0 || заг_різниця_день < 0 || заг_різниця_ніч < 0 || кв2_різниця_день < 0 || кв2_різниця_ніч < 0) {
@@ -214,7 +224,6 @@ function calculate() {
     return;
   }
 
-  // Виведення результату
   document.getElementById('resHeaderTotal').textContent = `Всього до сплати по дому: ${заг_разом_грн.toFixed(2)} грн`;
   document.getElementById('resColumns').innerHTML = buildColumnsHTML({
     заг_різниця_день, заг_різниця_ніч, заг_всього_квт, заг_сума_день, заг_сума_ніч, заг_разом_грн,
@@ -223,7 +232,6 @@ function calculate() {
   });
   document.getElementById('resultBox').style.display = 'block';
 
-  // Пакет запису для історії
   const record = {
     id: Date.now(),
     date: new Date().toLocaleString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
@@ -237,8 +245,7 @@ function calculate() {
   state.history.unshift(record);
   localStorage.setItem('svitlo_history', JSON.stringify(state.history));
   
-  // Поточні дані стають базою на наступний раз
-  state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v181: цей_міс_заг_день, v182: цей_міс_заг_ніч };
+  state.prev = { t1: цей_міс_кв1_день, t2: цей_міс_кв1_ніч, v182: цей_міс_заг_день, v181: цей_міс_заг_ніч };
   localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
   
   renderPrev();
@@ -257,7 +264,6 @@ function buildColumnsHTML(d) {
       <div class="data-item"><span>Ціна Ніч</span><strong>${d.заг_сума_ніч.toFixed(2)} ₴</strong></div>
       <div class="data-item"><span style="color:var(--accent)">Вся сума</span><strong>${d.заг_разом_грн.toFixed(2)} ₴</strong></div>
     </div>
-    
     <div class="col-block">
       <div class="col-block-title">Кв №1</div>
       <div class="data-item"><span>Цей міс День</span><strong>${d.цей_міс_кв1_день.toFixed(3)}</strong></div>
@@ -268,7 +274,6 @@ function buildColumnsHTML(d) {
       <div class="data-item"><span>Сума Ніч</span><strong>${d.кв1_сума_ніч.toFixed(2)} ₴</strong></div>
       <div class="data-item"><span style="color:var(--accent2)">Разом Кв1</span><strong>${d.кв1_разом.toFixed(2)} ₴</strong></div>
     </div>
-    
     <div class="col-block">
       <div class="col-block-title">Кв №2</div>
       <div class="data-item"><span>Цей міс День</span><strong>${d.цей_міс_заг_день.toFixed(3)}</strong></div>
@@ -284,11 +289,7 @@ function buildColumnsHTML(d) {
 
 function renderHistory() {
   const container = document.getElementById('historyList');
-  if(state.history.length === 0) { 
-    container.innerHTML = '<div style="color:var(--muted); font-size:11px; text-align:center; padding:10px;">Історія порожня</div>'; 
-    return; 
-  }
-
+  if(state.history.length === 0) { container.innerHTML = '<div style="color:var(--muted); font-size:11px; text-align:center; padding:10px;">Історія порожня</div>'; return; }
   container.innerHTML = state.history.map(item => `
     <div class="history-item">
       <div class="history-date">📅 Дата: ${item.date}</div>
@@ -296,6 +297,29 @@ function renderHistory() {
       <div class="columns-3">${buildColumnsHTML(item.data)}</div>
     </div>
   `).join('');
+}
+
+function exportData() {
+  if (state.history.length === 0 && !state.prev) { showToast('❌ Немає даних для копіювання'); return; }
+  const dataString = btoa(encodeURIComponent(JSON.stringify(state)));
+  navigator.clipboard.writeText(dataString).then(() => { showToast('📋 Базу скопійовано! Надішліть її текстом.'); }).catch(() => { alert("Код бази: " + dataString); });
+}
+
+function importData() {
+  const code = prompt("Введіть скопійований код бази:");
+  if (!code) return;
+  try {
+    const decoded = JSON.parse(decodeURIComponent(atob(code)));
+    if (decoded.prev || decoded.history) {
+      if (confirm("Увага! Це повністю перезапише ваші поточні записи та базу. Продовжити?")) {
+        state = decoded;
+        localStorage.setItem('svitlo_prev', JSON.stringify(state.prev));
+        localStorage.setItem('svitlo_history', JSON.stringify(state.history));
+        renderPrev(); renderHistory();
+        showToast('📥 Дані успішно імпортовано!');
+      }
+    } else { showToast('❌ Невірний код бази'); }
+  } catch(e) { showToast('❌ Помилка розшифровки коду'); }
 }
 
 window.deleteHistory = function(id) {
@@ -306,12 +330,7 @@ window.deleteHistory = function(id) {
 };
 
 function clearPrev() {
-  if(confirm('Скинути базу?')) { 
-    state.prev = null; 
-    localStorage.removeItem('svitlo_prev'); 
-    renderPrev(); 
-    showToast('🗑️ Базу скинуто'); 
-  }
+  if(confirm('Скинути базу?')) { state.prev = null; localStorage.removeItem('svitlo_prev'); renderPrev(); showToast('🗑️ Базу скинуто'); }
 }
 
 function showToast(msg) {
